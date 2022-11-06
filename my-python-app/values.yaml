@@ -1,0 +1,52 @@
+myapp:
+  metadata:
+    name: my-app
+  spec:
+    replicas: 1
+  containers:
+    image: gcr.io/mostafa-ahmed-gomaa/my-python-app:v1.0
+  ports:
+    containerPort: 80 
+  
+redis:
+  metadata:
+    name: redis-pod
+  labels:
+    name: redis
+  containers:
+    name: redis-container
+    image: redis
+  ports:
+    containerPort: 6379
+
+myconfigmap:
+  metadata:
+    name: my-app-cm
+  data:
+    ENVIRONMENT: "DEV"
+    HOST: "localhost"
+    PORT: "8000"
+    REDIS_HOST: "redis-svc"
+    REDIS_PORT: "6379"
+    REDIS_DB: "0"
+
+appsvc:
+  metadata:
+    name: my-app-svc
+  spec:
+    type: LoadBalancer
+  selector:
+    name: my-app
+  ports:
+      protocol: TCP
+      port: 8000
+
+
+redissvc:
+  metadata:
+    name: redis-svc
+  selector:
+    name: redis
+  ports:
+      protocol: TCP
+      port: 6379
